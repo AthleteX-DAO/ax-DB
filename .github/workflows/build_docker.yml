@@ -5,14 +5,17 @@ on:
       - infra
 env:
   IMAGE_TAG: ${{ github.sha }}
-  ECR_REPOSITORY_BASE_URL: 510626941593.dkr.ecr.us-east-1.amazonaws.com/athletex-db
+  ECR_REPOSITORY_BASE_URL: 510626941593.dkr.ecr.us-east-1.amazonaws.com
+  AWS_REGION: us-east-1
+  ATHLETEX_SERVICE_REPONAME: athletex-db
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-image:
     name: Build, Scan Image and Push on PR merge
     runs-on: ubuntu-latest
-    env:
-      AWS_REGION: us-east-1
-      ATHLETEX_SERVICE_REPONAME: athletex-db
     defaults:
       run:
         shell: bash
@@ -21,7 +24,7 @@ jobs:
         uses: colpal/actions-clean@v1
 
       - name: Get Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
