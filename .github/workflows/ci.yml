@@ -8,6 +8,7 @@ env:
   ECR_REPOSITORY_BASE_URL: 510626941593.dkr.ecr.us-east-1.amazonaws.com
   AWS_REGION: us-east-1
   ATHLETEX_SERVICE_REPONAME: athletex-db
+  EKS_CLUSTER_NAME: athletex-cluster
 permissions:
   id-token: write
   contents: read
@@ -64,8 +65,8 @@ jobs:
       - name: Install kubectl and helm
         run: |
           # Install required packages
-          apt update
-          apt install -y curl wget
+          sudo apt update
+          sudo apt install -y curl wget
 
           # Install kubectl
           curl -LO https://dl.k8s.io/release/v1.22.4/bin/linux/amd64/kubectl
@@ -94,10 +95,10 @@ jobs:
           role-session-name: GithubActions-DeployToEKS
 
       - name: Get Kuberentes Config
-        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
 
       - name: List existing configuration
-        run: helm list -n questdb
+        run: helm list -n test
 
       # - name: Helmfile Diff
       #   run: |
@@ -107,4 +108,4 @@ jobs:
       - name: Helmfile Deploy
         run: |
           cd infra
-          helmfile upgrade --install --dry-run --atomic
+          helm upgrade questdb questdb/questdb --install --atomic --values values.yaml -n test
