@@ -86,6 +86,18 @@ jobs:
           helm plugin install https://github.com/adamreese/helm-env
           helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
 
+          # helmfile
+          wget -O helmfile_linux_amd64 https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64
+          chmod +x helmfile_linux_amd64
+          mv helmfile_linux_amd64 /usr/local/bin/helmfile
+          helmfile version 
+
+          # sops
+          wget -O sops_3.7.3_amd64.deb https://github.com/mozilla/sops/releases/download/v3.7.3/sops_3.7.3_amd64.deb
+          sudo dpkg -i sops_3.7.3_amd64.deb
+          rm sops_3.7.3_amd64.deb
+          sops -v
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -100,12 +112,12 @@ jobs:
       - name: List existing configuration
         run: helm list -n test
 
-      # - name: Helmfile Diff
-      #   run: |
-      #     cd infra
-      #     helmfile --environment stage diff
+       - name: Helmfile Diff
+         run: |
+           cd infra
+           helmfile --environment stage diff
 
       - name: Helmfile Deploy
         run: |
           cd infra
-          helm upgrade questdb questdb/questdb --install --atomic --values values.yaml -n test
+          helmfile --environment stage apply --suppress-secrets
