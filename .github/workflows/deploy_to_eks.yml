@@ -8,7 +8,6 @@ env:
   ECR_REPOSITORY_BASE_URL: 510626941593.dkr.ecr.us-east-1.amazonaws.com
   AWS_REGION: us-east-1
   ATHLETEX_SERVICE_REPONAME: athletex-db
-  EKS_CLUSTER_NAME: athletex-cluster
 permissions:
   id-token: write
   contents: read
@@ -65,8 +64,8 @@ jobs:
       - name: Install kubectl and helm
         run: |
           # Install required packages
-          sudo apt update
-          sudo apt install -y curl wget
+          apt update
+          apt install -y curl wget
 
           # Install kubectl
           curl -LO https://dl.k8s.io/release/v1.22.4/bin/linux/amd64/kubectl
@@ -86,18 +85,6 @@ jobs:
           helm plugin install https://github.com/adamreese/helm-env
           helm plugin install https://github.com/jkroepke/helm-secrets --version v3.12.0
 
-          # helmfile
-          wget -O helmfile_linux_amd64 https://github.com/roboll/helmfile/releases/download/v0.144.0/helmfile_linux_amd64
-          chmod +x helmfile_linux_amd64
-          mv helmfile_linux_amd64 /usr/local/bin/helmfile
-          helmfile version 
-
-          # sops
-          wget -O sops_3.7.3_amd64.deb https://github.com/mozilla/sops/releases/download/v3.7.3/sops_3.7.3_amd64.deb
-          sudo dpkg -i sops_3.7.3_amd64.deb
-          rm sops_3.7.3_amd64.deb
-          sops -v
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -107,17 +94,17 @@ jobs:
           role-session-name: GithubActions-DeployToEKS
 
       - name: Get Kuberentes Config
-        run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+        run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
       - name: List existing configuration
-        run: helm list -n test
+        run: helm list -n questdb
 
-      - name: Helmfile Diff
-        run: |
-          cd infra
-          helmfile --environment stage diff
+      # - name: Helmfile Diff
+      #   run: |
+      #     cd infra
+      #     helmfile --environment stage diff
 
       - name: Helmfile Deploy
         run: |
           cd infra
-          helmfile --environment stage apply --suppress-secrets
+          helmfile upgrade --install --dry-run --atomic
