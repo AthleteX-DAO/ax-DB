@@ -10,7 +10,7 @@ environments:
 releases:
 - name: ax-db
   chart: ./service-chart
-  namespace: test
+  namespace: stage
   values:
     - ./service-chart/stage-service.yaml
   secrets:
