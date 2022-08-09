@@ -39,8 +39,6 @@ persistence:
   # existiung pvc needs to be in the namespace where questdb will be deployed
   # if you have problems with aws availability zones use nodeSelector to schedule nodes in the same az as volume
   # existingClaim: PVC_NAME_HERE
-  allowedTopologies:
-    az: us-east-1a
 
 
 ingress:

@@ -26,9 +26,4 @@ spec:
   storageClassName: "{{ .Values.persistence.storageClass }}"
 {{- end }}
 {{- end }}
-  allowedTopologies:
-  - matchLabelExpressions:
-  - key: failure-domain.beta.kubernetes.io/zone
-    values:
-    - "{{ .Values.persistence.allowedTopologies.az}}"
 {{- end }}
