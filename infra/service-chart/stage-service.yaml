@@ -15,6 +15,8 @@ ingress:
     - host: test.athletex.io
       paths:
         - '/'
+persistence:
+  size: 500Gi
 
 resources:
   limits:
