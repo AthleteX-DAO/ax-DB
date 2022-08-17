@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import socket
 import requests
@@ -6,14 +8,16 @@ import json
 from dotenv import load_dotenv   
 load_dotenv()                    
 
-
 # Constants
 apiKey = os.environ.get("API_KEY")
 HEADER = {'Ocp-Apim-Subscription-Key': apiKey }
 SDIO_URL = 'https://api.sportsdata.io/v3/nfl/stats/json/PlayerSeasonStats/2021'
 
-HOST = '3.236.73.223'
+#HOST = '3.236.73.223'
 PORT = 9009
+
+HOST = os.environ.get("DB_HOST")
+#PORT = os.environ.get("DB_PORT")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # define socket
 

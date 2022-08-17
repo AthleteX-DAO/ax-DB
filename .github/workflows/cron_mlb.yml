@@ -43,9 +43,9 @@ jobs:
         with:
           #build-args: NPM_AUTH_TOKEN=${{ secrets.NPM_AUTH_TOKEN }}
           push: true
-          context: .
+          context: ./cron/mlb
           tags: |
-            ${{ env.ECR_REPOSITORY_BASE_URL }}/${{ env.ATHLETEX_SERVICE_REPONAME }}:${{ github.sha }}
+            ${{ env.ECR_REPOSITORY_BASE_URL }}/${{ env.ATHLETEX_SERVICE_REPONAME }}:cron-mlb-${{ github.sha }}
 
       - name: Cleanup Everything
         uses: colpal/actions-clean@v1
