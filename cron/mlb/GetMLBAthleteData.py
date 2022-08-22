@@ -15,10 +15,10 @@ HEADER = {'Ocp-Apim-Subscription-Key': apiKey }
 SDIO_URL = 'https://api.sportsdata.io/v3/mlb/stats/json/PlayerSeasonStats/2022'
 
 #HOST = '3.236.73.223'
-#PORT = 9009
+PORT = 9009
 
 HOST = os.environ.get("DB_HOST")
-PORT = os.environ.get("DB_PORT")
+#PORT = os.environ.get("DB_PORT")
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # define socket
 
