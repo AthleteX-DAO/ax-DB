@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+
 import os
 import socket
 import requests
 import json
 
-from dotenv import load_dotenv   
-load_dotenv()                    
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # Constants
@@ -12,7 +14,8 @@ apiKey = os.environ.get("API_KEY")
 HEADER = {'Ocp-Apim-Subscription-Key': apiKey }
 SDIO_URL = 'https://api.sportsdata.io/v3/nfl/stats/json/PlayerSeasonStats/2021'
 
-HOST = '3.236.73.223'
+#HOST = '3.236.73.223'
+HOST = os.environ.get("DB_HOST")
 PORT = 9009
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # define socket
@@ -23,7 +26,7 @@ def getTheData():
         return theData
 
 def computePrice(athlete_data):
-        
+
         #Variables
         passingYards = athlete_data['PassingYards'] / 25
         rushingYards = athlete_data['RushingYards'] / 10
@@ -39,14 +42,14 @@ def computePrice(athlete_data):
         numerator = passingYards + rushingYards + receivingYards + rushingTouchdowns + receivingTouchdowns + passTD + reception + passingIntercept + fumblesLost
         denominator = athlete_data['OffensiveSnapsPlayed'] or athlete_data['DefensiveSnapsPlayed']
         if denominator == 0.0:
-                denominator = 1.0        
+                denominator = 1.0
         else:
                 pass
 
         computedAmericanFootballPrice = numerator / denominator
         if (computedAmericanFootballPrice < 0):
                 computedAmericanFootballPrice = 0
-        
+
         return computedAmericanFootballPrice
 
 # For UDP, change socket.SOCK_STREAM to socket.SOCK_DGRAM

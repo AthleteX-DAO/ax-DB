@@ -1,18 +1,21 @@
+#!/usr/bin/env python
+
 import os
 import json
 import socket
 import requests
 import unicodedata
 
-from dotenv import load_dotenv   
-load_dotenv()                    
+from dotenv import load_dotenv
+load_dotenv()
 
 # Constants
 apiKey = os.environ.get("MLB_API_KEY")
 HEADER = {'Ocp-Apim-Subscription-Key': apiKey }
 SDIO_URL = 'https://api.sportsdata.io/v3/mlb/stats/json/PlayerSeasonStats/2022'
 
-HOST = '3.236.73.223'
+#HOST = '3.236.73.223'
+HOST = os.environ.get("DB_HOST")
 PORT = 9009
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # define socket
@@ -36,7 +39,7 @@ def computePrice(athlete_data, lgweightedOnBase, sumPlateAppearances):
                 'DH': -17.5
         }
 
-        # Formula 
+        # Formula
         avg50yrRPW = 9.757
         # Note -- The collateralization multiplier is meant to scale the calculated WAR price, this may be needed in the future, or further down the stack
         # collateralizationMultiplier = 1000
