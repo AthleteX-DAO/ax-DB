@@ -1,3 +1,7 @@
+nodeSelector:
+  environment: prod
+  node: stateful
+
 persistence:
   size: 500Gi
 
