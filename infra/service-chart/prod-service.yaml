@@ -1,5 +1,5 @@
 nodeSelector:
-  environment: stage
+  environment: prod
   node: stateful
 
 persistence:
