@@ -1,7 +1,7 @@
 import requests                  
 
 # Constants
-API_URL = 'ax-api-athletex-api/nfl/players/update'
+API_URL = 'http://ax-api-athletex-api:8080/nfl/players/update'
 
 def syncLatestStats():
         httpResponse = requests.get(API_URL)
