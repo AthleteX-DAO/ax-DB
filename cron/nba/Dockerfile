@@ -20,4 +20,3 @@ RUN chmod +x /app/GetNBAAthleteData.py
 #USER appuser
 
 ENTRYPOINT ["/app/GetNBAAthleteData.py"]
-
