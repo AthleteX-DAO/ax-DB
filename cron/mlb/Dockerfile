@@ -20,4 +20,3 @@ RUN chmod +x /app/GetMLBAthleteData.py
 #USER appuser
 
 ENTRYPOINT ["/app/GetMLBAthleteData.py"]
-
